@@ -1,1 +1,1 @@
-export * from './firebase-token.guard'
+export * from './firebase-token.guard';

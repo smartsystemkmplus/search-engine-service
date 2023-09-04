@@ -6,9 +6,9 @@ import { IEmployeeRepository } from 'src/domain/repository';
   providers: [
     {
       provide: IEmployeeRepository,
-      useClass: EmployeeRepository
-    }
+      useClass: EmployeeRepository,
+    },
   ],
-  exports: [IEmployeeRepository]
+  exports: [IEmployeeRepository],
 })
-export class RepositoryModule { }
+export class RepositoryModule {}

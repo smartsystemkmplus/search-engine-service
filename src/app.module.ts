@@ -16,11 +16,8 @@ import { ConfigModule } from '@nestjs/config';
     DBSequelizeModule,
 
     // USECASES
-    SearchUsecaseModule
+    SearchUsecaseModule,
   ],
-  controllers: [
-    RESTSearchController,
-    GRPCSearchController
-  ],
+  controllers: [RESTSearchController, GRPCSearchController],
 })
-export class AppModule { }
+export class AppModule {}

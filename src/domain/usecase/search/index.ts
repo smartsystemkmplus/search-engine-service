@@ -1,1 +1,1 @@
-export * from "./search-usecase.abstract"
+export * from './search-usecase.abstract';
