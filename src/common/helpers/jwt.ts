@@ -1,4 +1,5 @@
 import * as jwtgen from 'jsonwebtoken';
+import AuthenticationError from '../error/AuthenticationError';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 
@@ -12,7 +13,7 @@ class TokenManager {
 
   mint(data: TokenData): string {
     if (!this.key) {
-      throw new Error('JWT_KEY is not defined.');
+      throw new AuthenticationError('JWT_KEY is not defined.');
     }
 
     return jwtgen.sign(
@@ -23,14 +24,14 @@ class TokenManager {
 
   check(token: string): TokenData {
     if (!this.key) {
-      throw new Error('JWT_KEY is not defined.');
+      throw new AuthenticationError('JWT_KEY is not defined.');
     }
 
     try {
       const decoded = jwtgen.verify(token, this.key);
       return decoded as TokenData;
     } catch (err) {
-      throw new Error('JWT verification failed: ' + err.message);
+      throw new AuthenticationError('JWT verification failed: ' + err.message);
     }
   }
 }
