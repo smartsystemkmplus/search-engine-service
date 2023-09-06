@@ -8,9 +8,9 @@ import { ISearchUsecase } from 'src/domain/usecase/search';
   providers: [
     {
       provide: ISearchUsecase,
-      useClass: SearchUsecase
+      useClass: SearchUsecase,
     },
   ],
   exports: [ISearchUsecase],
 })
-export class SearchUsecaseModule { }
+export class SearchUsecaseModule {}

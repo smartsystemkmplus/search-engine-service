@@ -1,12 +1,21 @@
 export enum RowType {
-  Employee = "Employee",
-  Course = "Course",
-  Document = "Document"
+  Employee = 'employee',
+  Course = 'course',
+  Document = 'document',
+  Trainer = 'trainer',
 }
 
 export class Row {
-  type: RowType
-  id: number
-  display: string
-  query: string
+  type: RowType;
+  id: number;
+  display: string;
+  describe?: {
+    is_sme?: boolean;
+    nipp?: string;
+    position?: string;
+    avatar?: string;
+    type_file?: string;
+    type_course?: string;
+    type_trainer?: string;
+  };
 }

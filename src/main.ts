@@ -1,22 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { join } from 'path';
-
-require('dotenv').config();
+import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.GRPC,
-    options: {
-      url: '0.0.0.0:3000',
-      package: 'search',
-      protoPath: join(__dirname, 'api/contract/search.proto'),
-    },
-  });
-  app.listen();
-
-  const restApp = await NestFactory.create(AppModule)
-  restApp.listen(3000)
+  const logger = new Logger();
+  const restApp = await NestFactory.create(AppModule);
+  const configService = restApp.get(ConfigService);
+  await restApp.listen(configService.getOrThrow('PORT'), '0.0.0.0', () =>
+    logger.log(`Server running at ${configService.getOrThrow('PORT')}`),
+  );
 }
 bootstrap();

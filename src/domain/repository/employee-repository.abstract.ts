@@ -1,4 +1,4 @@
 import { Row } from '../entity';
 export abstract class IEmployeeRepository {
-  abstract get(query: string): Promise<Row[]>;
+  abstract getEmployeeByQuery(search: string): Promise<Row[]>;
 }

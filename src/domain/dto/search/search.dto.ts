@@ -3,7 +3,7 @@ import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 export class SearchDto {
   @IsString()
   @IsNotEmpty()
-  query: string;
+  search: string;
 
   @IsNumber()
   @IsNotEmpty()

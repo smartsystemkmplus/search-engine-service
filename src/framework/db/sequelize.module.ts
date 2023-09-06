@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+// import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+// import * as Joi from 'joi';
 
 @Module({
   imports: [
@@ -12,6 +14,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
       database: 'defaultdb',
       models: [],
     }),
+    // ConfigModule.forRoot({
+    //   envFilePath: '.env',
+    // }),
   ],
 })
 export class DBSequelizeModule {}

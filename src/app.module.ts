@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     // CONFIG
     ConfigModule.forRoot({
-      isGlobal: true,
+      envFilePath: '.env',
     }),
 
     // DATA PROVIDER

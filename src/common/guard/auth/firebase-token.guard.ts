@@ -8,7 +8,6 @@ import { Request } from 'express';
 
 @Injectable()
 export class AuthFirebaseTokenGuard implements CanActivate {
-
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const response = context.switchToHttp().getResponse();
     const request = context.switchToHttp().getRequest();
