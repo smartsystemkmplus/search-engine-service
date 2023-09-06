@@ -7,4 +7,5 @@ COPY . .
 
 EXPOSE 5022
 
-CMD ["npm", "start"]
+#CMD ["npm", "start"]
+CMD [ "node", "dist/main.js" ]
