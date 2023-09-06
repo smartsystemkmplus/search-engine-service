@@ -1,12 +1,12 @@
-FROM node:20-alpine
+FROM node:20.3.0-alpine
 
 WORKDIR /app
-COPY package.json .
-RUN npm install
+COPY tsconfig*.json ./
+COPY package*.json ./
+RUN npm ci
 RUN npm run build
 COPY . .
 
 EXPOSE 5022
 
-#CMD ["npm", "start"]
-CMD [ "node", "dist/main" ]
+CMD ["npm", "run", "start:prod"]
