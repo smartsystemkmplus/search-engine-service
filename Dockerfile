@@ -3,7 +3,7 @@ FROM node:20.3.0-alpine
 WORKDIR /app
 COPY tsconfig*.json ./
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 RUN npm run build
 COPY . .
 
