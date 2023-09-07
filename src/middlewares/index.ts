@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import TokenManager from '../common/helpers/jwt';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { UserInfoRepository } from 'src/repository/user-info-repository.service';
+import { Request, Response, NextFunction } from 'express';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ export class kmsMiddleware implements NestMiddleware {
     private configService: ConfigService,
     private tokenManager: TokenManager,
   ) {}
-  async use(req: any, res: any, next: (error?: any) => void) {
+  async use(req: Request, res: Response, next: NextFunction) {
     let requiredPrivilege: string;
     let isPass: any;
     try {
