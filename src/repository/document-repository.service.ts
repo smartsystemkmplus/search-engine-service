@@ -25,6 +25,7 @@ export class DocumentRepository implements IDocumentRepository {
       LEFT JOIN tb_file tf 
         ON tr.file_id = tf.file_id
     WHERE 1 = 1 
+    AND tr.deletedAt IS NULL
     ${search ? `AND tr.title LIKE :formattedQueryParam` : ''}
     ORDER BY tr.title ASC
     LIMIT 10
@@ -39,7 +40,7 @@ export class DocumentRepository implements IDocumentRepository {
       result.map(async (curr: any) => ({
         type: RowType.Document,
         id: curr.repo_id,
-        display: curr.title,
+        display: curr.title.split('.')[0],
         describe: {
           link_file: await this.storage.getLink(curr.link),
           type_file: curr.type.toLowerCase(),
