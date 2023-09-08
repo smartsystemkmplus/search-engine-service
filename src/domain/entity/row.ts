@@ -17,5 +17,6 @@ export class Row {
     type_file?: string;
     type_course?: string;
     type_trainer?: string;
+    link_file?: string;
   };
 }
