@@ -40,7 +40,7 @@ export class ProfileRepository implements IProfileRepository {
     const rowResult = await Promise.all(
       result.map(async (curr: any) => ({
         type: RowType.Socmed,
-        id: curr.social_employee_profile_id_id,
+        id: curr.social_employee_profile_id,
         display: curr.firstName,
         describe: {
           social_media_avatar: await this.storage.getLink(curr.link),
