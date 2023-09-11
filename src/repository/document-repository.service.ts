@@ -28,7 +28,7 @@ export class DocumentRepository implements IDocumentRepository {
     AND tr.deletedAt IS NULL
     ${search ? `AND tr.title LIKE :formattedQueryParam` : ''}
     ORDER BY tr.title ASC
-    LIMIT 10
+    LIMIT 5
       `,
       {
         replacements: { formattedQueryParam },

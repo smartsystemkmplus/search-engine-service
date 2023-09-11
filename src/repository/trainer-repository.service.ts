@@ -59,7 +59,7 @@ export class TrainerRepository implements ITrainerRepository {
           : ''
       }
       ORDER BY trainer_name ASC
-      LIMIT 10
+      LIMIT 5
       `,
       {
         replacements: { formattedQueryParam },
