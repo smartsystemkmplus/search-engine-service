@@ -115,7 +115,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         }
       ORDER BY
         nr.name ASC
-        LIMIT 10
+        LIMIT 5
       `,
       {
         replacements: { formattedQueryParam },

@@ -17,9 +17,9 @@ export class CourseRepository implements ICourseRepository {
         tc.name,
         tc.type 
       FROM tb_course tc 
-      WHERE tc.name LIKE :formattedQueryParam
+      ${search ? `WHERE tc.name LIKE :formattedQueryParam` : ''}
       ORDER BY tc.name ASC
-      LIMIT 10
+      LIMIT 5
       `,
       {
         replacements: { formattedQueryParam },
