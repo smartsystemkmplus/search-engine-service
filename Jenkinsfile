@@ -79,7 +79,7 @@ pipeline {
         node ('master') {
           script {
             CURRENT_STAGE=env.STAGE_NAME
-            if (env.BRANCH_NAME == 'main'){
+            if (env.BRANCH_NAME == 'master'){
             docker.withRegistry('https://592716879257.dkr.ecr.ap-southeast-3.amazonaws.com', 'ecr:ap-southeast-3:aws-credentials') {
               app.push("${ENV_YAML}${env.BUILD_NUMBER}")  
             }
