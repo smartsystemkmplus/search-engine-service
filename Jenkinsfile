@@ -20,7 +20,7 @@ pipeline {
       steps {
         script {
           CURRENT_STAGE=env.STAGE_NAME
-          if (env.BRANCH_NAME == 'main') {
+          if (env.BRANCH_NAME == 'master') {
             MANIFEST_VALUE = 'values-prod.yaml'
             ENV_YAML = 'prod-'
           }
