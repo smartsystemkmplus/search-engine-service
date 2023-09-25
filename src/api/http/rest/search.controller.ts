@@ -10,6 +10,9 @@ export class RESTSearchController {
   @Get()
   async get(@Query('search') search: string): Promise<object> {
     try {
+      if (!search) {
+        return [];
+      }
       const searchDto = new SearchDto();
       searchDto.search = search; // Pass the query parameter to SearchDto
       return await this.SearchUsecase.search(searchDto); // Await the result
