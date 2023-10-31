@@ -23,7 +23,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         SELECT
           tep3.position_id,
           tep3.employee_number,
-          MAX(tep3.last_updated_date) AS newest_last_updated_date
+          tep3.last_updated_date AS newest_last_updated_date
         FROM
           tb_employee_position tep3
         LEFT JOIN safm_perubahan_organisasi spo
@@ -38,6 +38,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         RankedRows AS (
         SELECT
           sub.*,
+          max(max_dates.newest_last_updated_date),
           tpv.name AS position_name,
           te.employee_id,
           te.firstname AS name,
@@ -54,7 +55,6 @@ export class EmployeeRepository implements IEmployeeRepository {
                 ON
           max_dates.position_id = sub.position_id
           AND max_dates.employee_number = sub.employee_number
-          AND max_dates.newest_last_updated_date = sub.last_updated_date
         LEFT JOIN tb_position_v2 tpv
             ON
             sub.position_id = tpv.position_id
@@ -73,8 +73,9 @@ export class EmployeeRepository implements IEmployeeRepository {
         WHERE
           DATE(sub.end_date) = '9999-12-31'
             AND te.firstname IS NOT NULL
+        GROUP BY
+        	te.employee_id
         )
-
         SELECT
           max(nr.employee_id),
           nr.name,
@@ -86,10 +87,11 @@ export class EmployeeRepository implements IEmployeeRepository {
         FROM
           RankedRows nr
         WHERE 1=1
+
         ${search
         ? `AND (nr.name LIKE :formattedQueryParam
-                      OR nr.employee_number LIKE :formattedQueryParam
-                      OR nr.position_name LIKE :formattedQueryParam)`
+                        OR nr.employee_number LIKE :formattedQueryParam
+                        OR nr.position_name LIKE :formattedQueryParam)`
         : ''
       }
       GROUP BY
