@@ -26,14 +26,14 @@ export class SearchUsecase implements ISearchUsecase {
     const [
       courseData,
       documentData,
-      // employeeData,
+      employeeData,
       trainerData,
       postData,
       profileRepo,
     ] = await Promise.all([
       this.CourseRepo.getCourseByQuery(data.search),
       this.DocumentRepo.getDocumentByQuery(data.search),
-      // this.EmployeeRepo.getEmployeeByQuery(data.search),
+      this.EmployeeRepo.getEmployeeByQuery(data.search),
       this.TrainerRepo.getTrainerByQuery(data.search),
       this.PostRepo.getPostByQuery(data.search),
       this.ProfileRepo.getProfileByQuery(data.search),
@@ -41,7 +41,7 @@ export class SearchUsecase implements ISearchUsecase {
 
     const combinedData = [
       ...profileRepo,
-      // ...employeeData,
+      ...employeeData,
       ...postData,
       ...documentData,
       ...courseData,
