@@ -12,9 +12,6 @@ export class EmployeeRepository implements IEmployeeRepository {
     private storage: StorageService,
   ) { }
 
-
-
-
   async getEmployeeByQuery(search: string): Promise<Row[]> {
     const formattedQueryParam = `%${search}%`;
     const result = await this.sequelize.query(
