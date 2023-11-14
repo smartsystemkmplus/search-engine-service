@@ -8,6 +8,7 @@ import {
   ITrainerRepository,
   IPostRepository,
   IProfileRepository,
+  ISurveyRepository,
 } from 'src/domain/repository';
 import { ISearchUsecase } from 'src/domain/usecase/search';
 
@@ -20,7 +21,8 @@ export class SearchUsecase implements ISearchUsecase {
     private TrainerRepo: ITrainerRepository,
     private PostRepo: IPostRepository,
     private ProfileRepo: IProfileRepository,
-  ) {}
+    private SurveyRepo: ISurveyRepository,
+  ) { }
 
   async search(data: SearchDto): Promise<Row[]> {
     const [
@@ -30,6 +32,7 @@ export class SearchUsecase implements ISearchUsecase {
       trainerData,
       postData,
       profileRepo,
+      surveyRepo
     ] = await Promise.all([
       this.CourseRepo.getCourseByQuery(data.search),
       this.DocumentRepo.getDocumentByQuery(data.search),
@@ -37,15 +40,17 @@ export class SearchUsecase implements ISearchUsecase {
       this.TrainerRepo.getTrainerByQuery(data.search),
       this.PostRepo.getPostByQuery(data.search),
       this.ProfileRepo.getProfileByQuery(data.search),
+      this.SurveyRepo.getSurveyByQuery(data.search)
     ]);
 
     const combinedData = [
       ...profileRepo,
       ...employeeData,
       ...postData,
+      ...surveyRepo,
       ...documentData,
       ...courseData,
-      ...trainerData,
+      ...trainerData
     ];
 
     return combinedData;

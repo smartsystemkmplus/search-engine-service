@@ -5,6 +5,7 @@ export * from './employee-repository.abstract';
 export * from './trainer-repository.abstract';
 export * from './socmed-repository.abstract';
 export * from './post-repository.abstract';
+export * from './survey-repository.abstract';
 
 // For Only Middleware
 export * from './user-info-repository.abstract';
