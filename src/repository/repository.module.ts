@@ -8,6 +8,7 @@ import {
   IUserInfoRepository,
   IProfileRepository,
   IPostRepository,
+  ISurveyRepository
 } from 'src/domain/repository';
 import { CourseRepository } from './course-repository.service';
 import { DocumentRepository } from './document-repository.service';
@@ -16,6 +17,7 @@ import { PostRepository } from './post-repository.service';
 import { TrainerRepository } from './trainer-repository.service';
 import { StorageModule } from 'src/framework/storage/storage.module';
 import { UserInfoRepository } from './user-info-repository.service';
+import { SurveyRepository } from './survey-repository.service';
 
 @Module({
   imports: [StorageModule],
@@ -48,6 +50,10 @@ import { UserInfoRepository } from './user-info-repository.service';
       provide: IPostRepository,
       useClass: PostRepository,
     },
+    {
+      provide: ISurveyRepository,
+      useClass: SurveyRepository,
+    },
   ],
   exports: [
     IEmployeeRepository,
@@ -57,6 +63,7 @@ import { UserInfoRepository } from './user-info-repository.service';
     IUserInfoRepository,
     IProfileRepository,
     IPostRepository,
+    ISurveyRepository
   ],
 })
-export class RepositoryModule {}
+export class RepositoryModule { }
