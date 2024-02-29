@@ -76,6 +76,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         SELECT
           max(nr.employee_id),
           nr.name,
+          nr.employee_id,
           nr.employee_number,
           nr.position_id,
           nr.position_name,
