@@ -6,18 +6,20 @@ import { QueryTypes } from 'sequelize';
 
 @Injectable()
 export class CourseRepository implements ICourseRepository {
-  constructor(private sequelize: Sequelize) {}
+  constructor(private sequelize: Sequelize) { }
 
   async getCourseByQuery(search: string): Promise<Row[]> {
     const formattedQueryParam = `%${search}%`;
     const result = await this.sequelize.query(
       `
-      SELECT 
+      SELECT
         tc.course_id,
         tc.name,
-        tc.type 
-      FROM tb_course tc 
-      ${search ? `WHERE tc.name LIKE :formattedQueryParam` : ''}
+        tc.type
+      FROM tb_course tc
+      WHERE 1=1
+      ${search ? `AND tc.name LIKE :formattedQueryParam` : ''}
+        AND tc.deletedAt IS NULL
       ORDER BY tc.name ASC
       LIMIT 5
       `,
