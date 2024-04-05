@@ -16,7 +16,7 @@ export class kmsMiddleware implements NestMiddleware {
     private userInfo: UserInfoRepository,
     private configService: ConfigService,
     private tokenManager: TokenManager,
-  ) {}
+  ) { }
   async use(req: Request, res: Response, next: NextFunction) {
     let requiredPrivilege: string;
     let isPass: any;
@@ -25,9 +25,15 @@ export class kmsMiddleware implements NestMiddleware {
         req?.headers?.['smartkmsystem-authorization'] ||
         req?.cookies?.smartkmsystemAuth ||
         '';
+
+      console.log({ dataHeader, cookie: req?.cookies?.smartkmsystemAuth, auth: req?.headers?.['smartkmsystem-authorization'] })
+
       const accessToken: string | null = dataHeader.startsWith('Bearer ')
         ? dataHeader.substring(7, dataHeader.length)
         : null;
+
+      console.log({ accessToken })
+
 
       const decoded = this.tokenManager.check(accessToken);
 
