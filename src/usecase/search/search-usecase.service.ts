@@ -36,7 +36,7 @@ export class SearchUsecase implements ISearchUsecase {
     ] = await Promise.all([
       this.CourseRepo.getCourseByQuery(data.search),
       this.DocumentRepo.getDocumentByQuery(data.search),
-      this.EmployeeRepo.getEmployeeByQuery(data.search),
+      this.EmployeeRepo.getEmployeeByQueryV2(data.search),
       this.TrainerRepo.getTrainerByQuery(data.search),
       this.PostRepo.getPostByQuery(data.search),
       this.ProfileRepo.getProfileByQuery(data.search),
