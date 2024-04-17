@@ -76,6 +76,7 @@ export class EmployeeRepository implements IEmployeeRepository {
         SELECT
           max(nr.employee_id),
           nr.name,
+          nr.employee_id,
           nr.employee_number,
           nr.position_id,
           nr.position_name,
@@ -95,6 +96,73 @@ export class EmployeeRepository implements IEmployeeRepository {
           nr.employee_number
       ORDER BY
         nr.name ASC
+        LIMIT 5
+      `,
+      {
+        replacements: { formattedQueryParam },
+        type: QueryTypes.SELECT,
+      },
+    );
+
+    const rowResult = await Promise.all(
+      result.map(async (curr: any) => ({
+        type: RowType.Employee,
+        id: curr.employee_id,
+        display: curr.name,
+        describe: {
+          is_sme: !!curr.is_sme,
+          nipp: curr.employee_number,
+          position: curr.position_name,
+          avatar: await this.storage.getLink(curr.avatar),
+        },
+      })),
+    );
+    return Promise.resolve(rowResult);
+  }
+
+  async getEmployeeByQueryV2(search: string): Promise<Row[]> {
+    const formattedQueryParam = `%${search}%`;
+    const result = await this.sequelize.query(
+      `
+      SELECT
+        te.employee_id,
+        te.firstname  as name,
+        te.user_id,
+        te.employee_number,
+        tpmv2.position_master_id as position_id,
+        tpmv2.name AS position_name,
+        tu.role_code,
+        te.file_id,
+        tu.email,
+        tf.link AS avatar,
+        tu.phone_number
+      FROM
+        tb_employee te
+      LEFT JOIN tb_user tu
+        ON tu.user_id = te.user_id
+      LEFT JOIn tb_file tf
+        ON tf.file_id = te.file_id
+      LEFT JOIN tb_employee_position_master_sync tepms
+        ON tepms.employee_number = te.employee_number
+        AND tepms.start_date <= CURRENT_DATE()
+        AND tepms.end_date > CURRENT_DATE()
+        AND tepms.lakhar_id IS NULL
+        AND tepms.job_sharing_id IS NULL
+      LEFT JOIN tb_position_master_variant tpmv
+        ON tpmv.position_master_variant_id = tepms.position_master_variant_id
+      LEFT JOIN tb_position_master_v2 tpmv2
+        ON tpmv2.position_master_id = tpmv.position_master_id
+      WHERE 1=1
+      ${search
+        ? `AND (te.firstname LIKE :formattedQueryParam
+                        OR te.employee_number LIKE :formattedQueryParam
+                        OR tpmv2.name LIKE :formattedQueryParam)`
+        : ''
+      }
+      GROUP BY
+          te.employee_number
+      ORDER BY
+        te.firstname ASC
         LIMIT 5
       `,
       {
