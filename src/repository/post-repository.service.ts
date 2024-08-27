@@ -46,6 +46,8 @@ export class PostRepository implements IPostRepository {
       WHERE 1 = 1
         ${search ? `AND tsp.context_text LIKE :formattedQueryParam ` : ''}
         AND tsp.social_post_id NOT IN (${blocked_post_ids.length > 0 ? blocked_post_ids.join(',') : 0})
+      ORDER BY
+        tsp.createdAt DESC
       LIMIT 5
       `,
       {
