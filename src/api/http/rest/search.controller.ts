@@ -5,7 +5,7 @@ import { FormatResponseInterceptor } from 'src/common/interceptor';
 @UseInterceptors(FormatResponseInterceptor)
 @Controller('/spotlight')
 export class RESTSearchController {
-  constructor(private readonly SearchUsecase: ISearchUsecase) {}
+  constructor(private readonly SearchUsecase: ISearchUsecase) { }
 
   @Get()
   async get(@Query('search') search: string): Promise<object> {
@@ -15,6 +15,11 @@ export class RESTSearchController {
       }
       const searchDto = new SearchDto();
       searchDto.search = search; // Pass the query parameter to SearchDto
+
+      // * Clean search query that contains #
+      if (search.includes("#")) {
+        searchDto.search = search.replaceAll("#", "")
+      }
       return await this.SearchUsecase.search(searchDto); // Await the result
     } catch (error) {
       console.error(error); // Use console.error for error logging
