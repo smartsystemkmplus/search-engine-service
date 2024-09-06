@@ -9,28 +9,29 @@ export class PostRepository implements IPostRepository {
   constructor(private sequelize: Sequelize) { }
 
   async getPostByQueryAdvanced(words: string[]): Promise<Row[]> {
+    // Remove the hardcoded words assignment
 
-    // * Statement to get locate occurances by words
-    const locateStatement = `
-      LOCATE('KMevent2024', tsp.context_text) as l1,
-      LOCATE('COPVideo2024', tsp.context_text) as l2,
-      LOCATE('HariPelindo2024', tsp.context_text) as l3,
-    `
-    // * Constraint that return if context_text contains all word exactly
-    const completeConstraint = `tsp.context_text LIKE '%KMevent2024 COPVideo2024 HariPelindo2024%'`
+    // Generate locateStatement dynamically
+    const locateStatement = words
+      .map((word, index) => `LOCATE('${word}', tsp.context_text) as l${index + 1}`)
+      .join(',\n      ');
 
-    // * Constraint that return if context_text contains all word but separated
-    const everyConstraint = `
-    tsp.context_text LIKE '%KMevent2024%'
-    AND tsp.context_text LIKE '%COPVideo2024%'
-    AND tsp.context_text LIKE '%HariPelindo2024%'
-    `
+    // Update completeConstraint to use all words
+    const completeConstraint = `tsp.context_text LIKE '%${words.join(' ')}%'`;
 
-    // * Statement that give order_rating to word occurences
-    const orderRating = `
-    WHEN l1 < l2 AND l2 < l3 THEN 2
-    WHEN l1 < l2 THEN 1
-    `
+    // Modify everyConstraint to create a condition for each word
+    const everyConstraint = words
+      .map(word => `tsp.context_text LIKE '%${word}%'`)
+      .join('\n    AND ');
+
+    // Adjust orderRating to handle any number of words
+    const orderRating = words
+      .map((_, index) => {
+        const conditions = Array.from({ length: words.length - index }, (_, i) => `l${i + 1}`).join(' < ');
+        return `WHEN ${conditions} THEN ${words.length - index}`;
+      })
+      .filter(condition => condition !== '')
+      .join('\n    ');
 
     const rawBlockedIds = await this.getBlockedPost()
     const blocked_post_ids = rawBlockedIds.map((e: any) => e.social_post_id)
@@ -42,17 +43,14 @@ export class PostRepository implements IPostRepository {
             tsp.context_text,
             tsp.updatedAt,
             tsp.createdAt,
-            ${locateStatement}
-            -- LOCATE('KMevent2024', tsp.context_text) as l1,
-            -- LOCATE('COPVideo2024', tsp.context_text) as l2,
-            -- LOCATE('HariPelindo2024', tsp.context_text) as l3,
+            ${locateStatement},
             CASE
               WHEN
                 ${completeConstraint}
-              THEN 2
+              THEN ${words.length}
               WHEN
                 ${everyConstraint}
-              THEN 1
+              THEN ${words.length - 1}
               ELSE 0
             END query_rating
           FROM tb_social_posts tsp
@@ -124,7 +122,8 @@ export class PostRepository implements IPostRepository {
 
   async getPostByQuery(search: string): Promise<Row[]> {
     // * Check if search is needing advanced query
-    const splitSearch = search.split(" ")
+    const splitSearch = search.trim().split(" ")
+    console.log({ splitSearch })
     if (splitSearch.length > 1) {
       return await this.getPostByQueryAdvanced(splitSearch)
     }
