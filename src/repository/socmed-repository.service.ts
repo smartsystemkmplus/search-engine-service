@@ -10,7 +10,7 @@ export class ProfileRepository implements IProfileRepository {
   constructor(
     private sequelize: Sequelize,
     private storage: StorageService,
-  ) {}
+  ) { }
 
   async getProfileByQuery(search: string): Promise<Row[]> {
     const formattedQueryParam = `%${search}%`;
@@ -23,7 +23,7 @@ export class ProfileRepository implements IProfileRepository {
         te.employee_number
       FROM tb_social_employee_profile tsep
         LEFT JOIN tb_file tf
-          ON tsep.avatar = tf.file_id    
+          ON tsep.avatar = tf.file_id
         LEFT JOIN tb_employee te
           ON tsep.employee_id = te.employee_id
       WHERE 1 = 1

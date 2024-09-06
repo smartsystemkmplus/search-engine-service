@@ -5,6 +5,7 @@ export enum RowType {
   Trainer = 'trainer',
   Post = 'post',
   Socmed = 'socmed',
+  Survey = 'survey',
 }
 
 export class Row {
