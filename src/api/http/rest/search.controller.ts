@@ -14,7 +14,7 @@ export class RESTSearchController {
         return [];
       }
       const searchDto = new SearchDto();
-      searchDto.search = search; // Pass the query parameter to SearchDto
+      searchDto.search = search.trim(); // Pass the query parameter to SearchDto
 
       // * Clean search query that contains #
       if (search.includes("#")) {
