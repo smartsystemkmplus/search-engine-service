@@ -55,9 +55,12 @@ export class PostRepository implements IPostRepository {
             END query_rating
           FROM tb_social_posts tsp
           WHERE 1=1
-            AND  ${completeConstraint}
-            OR (
-              ${everyConstraint}
+            AND tsp.social_post_id NOT IN (${blocked_post_ids.length > 0 ? blocked_post_ids.join(',') : 0})
+            AND (
+              ${completeConstraint}
+              OR (
+                ${everyConstraint}
+              )
             )
         )
         SELECT
