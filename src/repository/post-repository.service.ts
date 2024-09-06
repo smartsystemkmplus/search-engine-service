@@ -84,9 +84,9 @@ export class PostRepository implements IPostRepository {
           LEFT JOIN tb_social_post_categories tspc
             ON tsp.category_id = tspc.category_id
         ORDER BY
-          order_rating + query_rating,
-          tsp.updatedAt,
-          tsp.createdAt
+          order_rating + query_rating DESC,
+          tsp.createdAt DESC,
+          tsp.updatedAt DESC
         LIMIT 5
       `,
       {
