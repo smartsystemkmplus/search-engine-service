@@ -9,7 +9,7 @@ import { UserInfo } from 'src/domain/entity';
 /** Use Redis; this function will always be called in middleware */
 @Injectable()
 export class UserInfoRepository implements IUserInfoRepository {
-  constructor(private sequelize: Sequelize) {}
+  constructor(private sequelize: Sequelize) { }
   async getUserInfo(
     user_id: number,
     privilegeCode?: string,
@@ -17,14 +17,14 @@ export class UserInfoRepository implements IUserInfoRepository {
     const user: any = await this.sequelize
       .query(
         `
-    SELECT tu.user_id, 
-      tu.uid, 
-      tu.role_code, 
-      tu.privilege_group_id, 
-      te.employee_id, 
+    SELECT tu.user_id,
+      tu.uid,
+      tu.role_code,
+      tu.privilege_group_id,
+      te.employee_id,
       te.employee_number,
       te.old_employee_number,
-      te.archived_at, 
+      te.archived_at,
       te.group_id,
       tsep.social_employee_profile_id,
       GROUP_CONCAT(DISTINCT turc.role_code) AS role_code
@@ -35,7 +35,7 @@ export class UserInfoRepository implements IUserInfoRepository {
     WHERE 1=1 AND
     tu.deletedAt IS NULL AND
     tu.user_id = ${user_id}
-    GROUP BY tu.user_id, te.employee_id, tsep.social_employee_profile_id 
+    GROUP BY tu.user_id, te.employee_id, tsep.social_employee_profile_id
     LIMIT 1
   `,
         { type: QueryTypes.SELECT },
@@ -52,7 +52,7 @@ export class UserInfoRepository implements IUserInfoRepository {
 
     let vendor: any = {};
     let subcon: any = {};
-    if (user.role_code.includes('VNDR')) {
+    if (user?.role_code?.includes('VNDR')) {
       vendor = await this.sequelize.query(
         `
       SELECT tvm.vendor_member_id, tvm.vendor_id, tvm.photo_profile, tvm.name FROM tb_vendor_member tvm
@@ -63,7 +63,7 @@ export class UserInfoRepository implements IUserInfoRepository {
         },
       );
     }
-    if (user.role_code.includes('SBCN')) {
+    if (user?.role_code?.includes('SBCN')) {
       subcon = await this.sequelize.query(
         `
       SELECT tvm.subcon_member_id, tvm.subcon_id, tvm.photo_profile, tvm.name FROM tb_subcon_member tvm
@@ -84,7 +84,7 @@ export class UserInfoRepository implements IUserInfoRepository {
         const privilegesResult: { privilege_code: string }[] =
           await this.sequelize.query(
             `
-          SELECT privilege_code FROM tb_privilege_privilege_group tppg 
+          SELECT privilege_code FROM tb_privilege_privilege_group tppg
           WHERE 1 = 1
           AND privilege_group_id = 3
           AND deletedAt IS NULL
