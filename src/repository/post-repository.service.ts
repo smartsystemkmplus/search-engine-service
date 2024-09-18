@@ -27,7 +27,10 @@ export class PostRepository implements IPostRepository {
     // Adjust orderRating to handle any number of words
     const orderRating = words
       .map((_, index) => {
-        const conditions = Array.from({ length: words.length - index }, (_, i) => `l${i + 1}`).join(' < ');
+        if (index === words.length - 1) return ''; // No condition for the last word
+        const conditions = Array.from({ length: words.length - index - 1 }, (_, i) => {
+          return `l${1 + i} < l${2 + i}`;
+        }).join(' AND ');
         return `WHEN ${conditions} THEN ${words.length - index}`;
       })
       .filter(condition => condition !== '')
@@ -84,9 +87,9 @@ export class PostRepository implements IPostRepository {
           LEFT JOIN tb_social_post_categories tspc
             ON tsp.category_id = tspc.category_id
         ORDER BY
-          order_rating + query_rating,
-          tsp.updatedAt,
-          tsp.createdAt
+          order_rating + query_rating DESC,
+          tsp.createdAt DESC,
+          tsp.updatedAt DESC
         LIMIT 5
       `,
       {
