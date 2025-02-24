@@ -1,4 +1,5 @@
-FROM node:20.3.0-alpine
+#FROM node:20.3.0-alpine
+FROM public.ecr.aws/docker/library/node:20.3.0-alpine
 
 WORKDIR /app
 COPY . .
